@@ -1,0 +1,14 @@
+diff --git a/src/png/pngpriv.h b/src/png/pngpriv.h
+index 6d1b92f..e4a3d5c 100644
+--- a/src/png/pngpriv.h
++++ b/src/png/pngpriv.h
+@@ -528,5 +528,9 @@
+ #  include <float.h>
+ 
++#  if defined(__APPLE__)
++#    include <math.h>
++#  endif
++
+ #  if (defined(__MWERKS__) && defined(macintosh)) || defined(applec) || \
+     defined(THINK_C) || defined(__SC__) || defined(TARGET_OS_MAC)
+    /* We need to check that <math.h> hasn't already been included earlier

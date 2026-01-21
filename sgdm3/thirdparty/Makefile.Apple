@@ -122,7 +122,7 @@ debug:
 release:
 	$(MAKE) MODE=Release ARCH=$(ARCH) _all
 
-_all:	_unpack _config _compile
+_all:	_patch _config _compile
 
 ##################################################################
 #### 2012/07/30 exp29
@@ -145,7 +145,17 @@ _unpack:	$(ZIP_PATHNAME)
 $(ZIP_PATHNAME):
 	mkdir -p $(ZIP_PATHNAME)
 
-_config:	$(OBJ_PATHNAME)
+_patch:	_unpack
+	@set -e; \
+	if [ -d $(WXWIDGETS_PATCH_DIR) ] ; then \
+		for patch in $(WXWIDGETS_PATCH_DIR)/*.patch ; do \
+			[ -f "$$patch" ] || continue ; \
+			echo Applying $$patch ; \
+			patch -p1 -N -d $(SRC_PATHNAME) < $$patch ; \
+		done ; \
+	fi
+
+_config:	_patch $(OBJ_PATHNAME)
 	(cd $(OBJ_PATHNAME); $(RUN_CONFIGURE) $(MODE_OPTIONS))
 
 _compile:	$(OBJ_PATHNAME)
