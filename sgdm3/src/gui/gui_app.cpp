@@ -148,6 +148,14 @@ int gui_app::OnExit(void)
         wxTheClipboard->Flush();
     }
 
+	// on Mac, quitting (Cmd-Q or a quit AppleEvent) closes our frames with
+	// Destroy(), which only schedules them for deletion at the next idle --
+	// and the main loop exits before that happens.  delete them now, before
+	// _cleanup() frees the global tables their destructors still reference.
+	// (wxAppConsoleBase::OnExit() does this too, but only after _cleanup().)
+
+	DeletePendingObjects();
+
 	_cleanup_help();
 	_cleanup();
 
