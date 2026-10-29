@@ -124,6 +124,9 @@ release:
 
 _all:	_patch _config _compile
 
+## The steps above must run in order; the wxWidgets make still honors -j.
+.NOTPARALLEL:
+
 ##################################################################
 #### 2012/07/30 exp29
 #### In the 2.8.12, we used the zip file (and could build all 3 platforms
@@ -159,7 +162,7 @@ _config:	_patch $(OBJ_PATHNAME)
 	(cd $(OBJ_PATHNAME); $(RUN_CONFIGURE) $(MODE_OPTIONS))
 
 _compile:	$(OBJ_PATHNAME)
-	(cd $(OBJ_PATHNAME); make)
+	(cd $(OBJ_PATHNAME); $(MAKE))
 
 $(OBJ_PATHNAME):
 	mkdir -p $(OBJ_PATHNAME)
